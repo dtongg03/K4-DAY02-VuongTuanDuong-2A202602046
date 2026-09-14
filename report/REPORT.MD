@@ -55,9 +55,9 @@ Cặp `drive_038` mine 13 (`truck`) vs ref 9 (`bus`), IoU 0.94108: lớp khác n
 
 | Trước khi sửa | Loại lỗi | Cách phát hiện | Sau khi sửa và quy tắc |
 | --- | --- | --- | --- |
-| 102 hộp; `drive_033` 30, `drive_038` 38, `drive_008` 29; vượt mục tiêu 40–60 | phạm vi — suy luận gán thừa vật xa/nhỏ | `within_slide_workload_target=false`; `unmatched_mine=56` (033:20, 038:21, 008:15) vs `unmatched_comparison=4`; overlay 033/038/008 dày hộp đỏ không có hộp xanh tương ứng | Chưa có gói xuất lại trong `/output`. Đề xuất: lọc hộp xa/mờ không đủ căn cứ phân lớp, giữ lại hộp đủ bằng chứng, xuất lại cả 2 gói từ cùng trạng thái |
-| `drive_008` mine 18 ↔ ref 15, IoU 0.137804, cùng lớp `car` | hình học — suy luận trùng lặp/sai hộp ở cụm xa | IoU thấp nhất 46 cặp, thấp hơn hẳn cặp thứ hai (0.6719) | Chưa có gói xuất lại. Đề xuất: kiểm trùng, vẽ sát phần nhìn thấy |
-| 12/46 lệch lớp, toàn bộ hoán vị truck/bus/van | lớp | `class_agreement=0.73913`; IoU cao vẫn lệch (0.94108, 0.886521) | Chưa có gói xuất lại. Đề xuất: áp lại định nghĩa truck/bus/van, ca thiếu bằng chứng để `unclear` + `needs_review` |
+| 102 hộp; `drive_033` 30, `drive_038` 38, `drive_008` 29; vượt mục tiêu 40–60 | phạm vi — suy luận gán thừa vật xa/nhỏ | `within_slide_workload_target=false`; `unmatched_mine=56` (033:20, 038:21, 008:15) vs `unmatched_comparison=4`; overlay 033/038/008 dày hộp đỏ không có hộp xanh tương ứng | Đề xuất: lọc hộp xa/mờ không đủ căn cứ phân lớp, giữ lại hộp đủ bằng chứng, xuất lại cả 2 gói từ cùng trạng thái |
+| `drive_008` mine 18 ↔ ref 15, IoU 0.137804, cùng lớp `car` | hình học — suy luận trùng lặp/sai hộp ở cụm xa | IoU thấp nhất 46 cặp, thấp hơn hẳn cặp thứ hai (0.6719) | kiểm trùng, vẽ sát phần nhìn thấy |
+| 12/46 lệch lớp, toàn bộ hoán vị truck/bus/van | lớp | `class_agreement=0.73913`; IoU cao vẫn lệch (0.94108, 0.886521) | áp lại định nghĩa truck/bus/van, ca thiếu bằng chứng để `unclear` + `needs_review` |
 
 - Số hộp `needs_review` trước và sau khi kiểm:
   - Không có trong `/output`. Audit chỉ cho tổng `visibility/boundary/review_state: 102` (tức đủ thuộc tính), không bóc theo giá trị. Cần đếm trong `mine-native.zip/annotations.xml`.
