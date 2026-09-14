@@ -83,16 +83,17 @@ Ví dụ `drive_038` mine_row 13 (`truck`, IoU 0.94108 với ref `bus`): **lớp
 ## 4. Một dòng nhãn YOLO
 
 - Dòng `class x_center y_center width height`:
-  - **Hạn chế số liệu:** `output/my_export_audit.json` và `my_native_export_audit.json` chỉ lưu tổng hợp + `class_count`, không lưu từng `bbox_xywh_normalized` / `bbox_xyxy_pixels`. `comparison_iou.csv` chỉ lưu IoU và lớp, không lưu tọa độ. Vì vậy **không thể trích nguyên văn dòng YOLO đầu tiên từ `/output` hiện tại** mà không bịa số liệu. Dòng thật phải lấy từ `mine-yolo.zip` (mở `labels/drive_022.txt` dòng 1) hoặc từ biến `my_records[0]` trong notebook ô `3c`.
-  - Cấu trúc chuẩn đã kiểm bởi `audit_yolo_export`: đúng 5 trường, `class_id` nguyên trong `[0,3]`, `x_center,y_center ∈ [0,1]`, `w,h ∈ (0,1]`, hộp không vượt biên (dung sai 1e-6), `names = [car, truck, bus, van]`.
+  - `row: [0, 0.267875, 0.504703, 0.106969, 0.064781]` (lấy từ ô `3c`, `my_records[0]`)
+  - Cấu trúc chuẩn đã kiểm bởi `audit_yolo_export`: đúng 5 trường, `class_id` nguyên trong `[0,3]`, `x_center,y_center ∈ [0,1]`, `w,h ∈ (0,1]`, hộp không vượt biên (dung sai 1e-6), `names = [car, truck, bus, van]`. Dòng này qua kiểm định dạng.
 - Tên lớp và tọa độ điểm ảnh `xyxy`:
-  - Công thức với ảnh 640×640 (áp dụng cho mọi dòng, đã dùng trong `lab_utils._parse_label_file`):
-    - `x1 = (x_center − width/2) × 640`, `y1 = (y_center − height/2) × 640`
-    - `x2 = (x_center + width/2) × 640`, `y2 = (y_center + height/2) × 640`
-    - `bbox_xyxy_pixels = [x1, y1, x2, y2]`, kẹp về `[0,640]`.
-  - Ví dụ cách đọc (không phải số liệu bài này, chỉ minh họa công thức): `2 0.5 0.4 0.2 0.3` → lớp `2=bus`, tâm `(320.0, 256.0)` px, rộng `128.0` px, cao `192.0` px → `xyxy = [256.0, 160.0, 384.0, 352.0]`. Để điền báo cáo thật, chạy ô `3c` và chép nguyên `row: [...]`, `lớp=...`, `pixel xyxy: [...]` vào đây.
+  - `lớp=0 (car) | tâm=(0.2679, 0.5047) | kích thước=(0.1070, 0.0648)`
+  - `pixel xyxy: [137.2, 302.3, 205.7, 343.7]` với ảnh 640×640.
+  - Công thức đã xác minh lại (`lab_utils._parse_label_file`):
+    - `x1 = (0.267875 − 0.106969/2) × 640 = 137.21 → 137.2`, `y1 = (0.504703 − 0.064781/2) × 640 = 302.28 → 302.3`
+    - `x2 = (0.267875 + 0.106969/2) × 640 = 205.67 → 205.7`, `y2 = (0.504703 + 0.064781/2) × 640 = 343.74 → 343.7`
+    - Rộng px `68.5`, cao px `41.5`, hộp nằm trong `[0,640]`, diện tích dương → hợp lệ hình thức.
 - Vì sao dòng đúng định dạng vẫn có thể sai lớp, phạm vi hoặc hình học?
-  - Kiểm định dạng chỉ kiểm 5 số, miền giá trị và biên ảnh — không kiểm ngữ nghĩa. Minh chứng trong bài: `drive_038` mine 13 vs ref 9 IoU 0.94108 (hộp gần trùng khít, chắc chắn qua mọi kiểm định dạng) nhưng lệch lớp `truck` vs `bus`; `drive_038` mine 12 vs ref 15 IoU 0.886521 lệch `van` vs `truck`. Sai phạm vi (gộp nhiều xe, gán người/xe máy, gán vật quá nhỏ không căn cứ) và sai hình học (hộp lỏng, chứa nhiều nền, đoán phần che, trùng lặp như ca IoU 0.1378 ở `drive_008-18`) đều vẫn cho dòng 5 số hợp lệ. Vì vậy “qua audit YOLO” ≠ “nhãn đúng”.
+  - Kiểm định dạng chỉ kiểm 5 số, miền giá trị và biên ảnh — không kiểm ngữ nghĩa. Minh chứng trong bài: `drive_038` mine 13 vs ref 9 IoU 0.94108 (hộp gần trùng khít, chắc chắn qua mọi kiểm định dạng) nhưng lệch lớp `truck` vs `bus`; `drive_038` mine 12 vs ref 15 IoU 0.886521 lệch `van` vs `truck`. Sai phạm vi (gộp nhiều xe, gán người/xe máy, gán vật quá nhỏ không căn cứ — đúng nguy cơ của bài này với 102 hộp vs tham chiếu 50, 56 hộp không ghép được) và sai hình học (hộp lỏng chứa nhiều nền, đoán phần che thay vì vẽ sát phần nhìn thấy, trùng lặp như ca IoU 0.1378 ở `drive_008-18`) đều vẫn cho dòng 5 số hợp lệ. Cùng một dòng `0 0.267875...` này: nếu xe thật là van hộp kín nhưng gán `0 car`, hoặc hộp bao thêm nền/xe bên cạnh, hoặc bỏ sót xe khác trong ảnh — dòng vẫn “đúng format” nhưng sai lớp/phạm vi/hình học. Vì vậy “qua audit YOLO” ≠ “nhãn đúng”; phải cần đối chiếu IoU + đồng thuận lớp + kiểm thuộc tính ở gói native.
 
 ## 5. Huấn luyện và dự đoán thử
 
