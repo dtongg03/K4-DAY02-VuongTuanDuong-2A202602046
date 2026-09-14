@@ -29,7 +29,7 @@
 - Mã SHA-256 của gói đối chiếu:
   - `c8bbc767d8bb9a29f4ca5abf0c3516e5c2af94c58143a980b0148cfe0b500d2b`
 - Nếu làm cá nhân, ghi mã lần phát và thời điểm nhận bộ tham chiếu:
-  - Không có trong `/output`. Cần bổ sung từ tin nhắn Lab Coach.
+
 
 Giải thích vì sao bài của bạn vẫn độc lập trước khi đối chiếu:
 
