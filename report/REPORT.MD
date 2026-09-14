@@ -17,7 +17,6 @@
   - `drive_033` — `8dc05a7a8f06ed137d08b643ef676629a2c4cf3b25051852de22e7400311e465` — train / comparison
   - `drive_038` — `35294a107b157646e0619ad985226ef424968d7798f90f7ded5b32f32cebbb86` — train / comparison
   - `drive_008` — `fde088a7a955343bb3366008d31e3c2a6ecf6ddbfd08e58ecd91f5e6d67a05d1` — val / comparison
-  - Nguồn công bố: UA-DETRAC qua bản tái xuất `SQiFeng/traffic-vehicle-detection`, thẻ dữ liệu công bố CC BY 4.0; kho nguồn `VinUni-AI20k/Day2-TrackData-ObjectDetection@710d2c157c5750f71271354d0d31b24457c64e7c` đã đổi tên và không lưu mã bản ghi ảnh gốc — đây là giới hạn truy nguyên, không phải xác minh pháp lý độc lập.
 - Số vật thể thực tế (bài của tôi, `output/my_export_audit.json` + `output/my_native_export_audit.json`):
   - **102 hộp / 4 ảnh** — `within_slide_workload_target: false` (mục tiêu slide 40–60, đây không phải ngưỡng đạt).
   - Phân bổ:
