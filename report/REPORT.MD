@@ -1,6 +1,6 @@
 # Báo cáo — Ngày 2: phát hiện vật thể
 
-**Họ và tên:** Vuong Tuan Duong<br>
+**Họ và tên:** Vương Tuấn Dương<br>
 **MSSV:** 2A202602046<br>
 **Hình thức:** cá nhân<br>
 **Mã cặp:** `SOLO`
